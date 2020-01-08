@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * 2020/1/7 18:55
  */
 public class IniRealmDemo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuickStart.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IniRealmDemo.class);
 
     @Test
     public void testAuthentication() {
