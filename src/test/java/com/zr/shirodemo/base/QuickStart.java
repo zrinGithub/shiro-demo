@@ -1,4 +1,4 @@
-package com.zr.shirodemo;
+package com.zr.shirodemo.base;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
  * @author zhangr
  * 2020/1/6 19:48
  */
-public class QuickStart4 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuickStart4.class);
+public class QuickStart {
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuickStart.class);
 
     private SimpleAccountRealm accountRealm = new SimpleAccountRealm();
 
