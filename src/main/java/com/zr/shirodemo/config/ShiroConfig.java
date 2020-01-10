@@ -67,11 +67,12 @@ public class ShiroConfig {
     @Bean
     public SecurityManager securityManager() {
         DefaultSecurityManager securityManager = new DefaultSecurityManager();
-        securityManager.setRealm(customRealm());
 
         //如果不是前后端分离，不用设置 sessionManager
         securityManager.setSessionManager(sessionManager());
 
+        //设置realm推荐放在后面，不然可能因为版本文体不生效
+        securityManager.setRealm(customRealm());
         return securityManager;
     }
 
