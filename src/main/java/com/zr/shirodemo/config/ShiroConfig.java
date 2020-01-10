@@ -55,6 +55,15 @@ public class ShiroConfig {
         //有编辑权限才能访问
         filterDefinitionMap.put("/video/update", "perms[video_update]");
 
+        //swagger对应接口放过
+
+        filterDefinitionMap.put("/swagger-ui.html", "anon");
+        filterDefinitionMap.put("/swagger-resources", "anon");
+        filterDefinitionMap.put("/swagger-resources/**", "anon");
+        filterDefinitionMap.put("/v2/api-docs", "anon");
+        filterDefinitionMap.put("/webjars/springfox-swagger-ui/**", "anon");
+
+
         //authc: 通过认证才能访问
         //anon: 匿名访问
         filterDefinitionMap.put("/**", "authc");
@@ -79,7 +88,7 @@ public class ShiroConfig {
     @Bean
     public CustomRealm customRealm() {
         CustomRealm customRealm = new CustomRealm();
-//        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return customRealm;
     }
 
