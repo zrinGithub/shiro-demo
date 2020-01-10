@@ -44,7 +44,6 @@ public class ShiroConfig {
 
         //保持拦截的顺序，配置参考 DefaultFilter
         Map<String, String> filterDefinitionMap = new LinkedHashMap<>();
-        filterDefinitionMap.put("/swagger-ui.html", "anon");
         //退出过滤器
         filterDefinitionMap.put("/logout", "logout");
         //匿名可以访问
