@@ -1,5 +1,6 @@
 package com.zr.shirodemo.config;
 
+import com.zr.shirodemo.config.filter.CustomRolesOrAuthorizationFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -56,13 +58,17 @@ public class ShiroConfig {
         filterDefinitionMap.put("/video/update", "perms[video_update]");
 
         //swagger对应接口放过
-
         filterDefinitionMap.put("/swagger-ui.html", "anon");
         filterDefinitionMap.put("/swagger-resources", "anon");
         filterDefinitionMap.put("/swagger-resources/**", "anon");
         filterDefinitionMap.put("/v2/api-docs", "anon");
         filterDefinitionMap.put("/webjars/springfox-swagger-ui/**", "anon");
 
+        //自定义filter
+        Map<String, Filter> filterMap = new LinkedHashMap<>();
+        filterMap.put("roleOrFilter",new CustomRolesOrAuthorizationFilter());
+        factoryBean.setFilters(filterMap);
+        filterDefinitionMap.put("/adminOr","roleOrFilter[admin,root]");
 
         //authc: 通过认证才能访问
         //anon: 匿名访问
