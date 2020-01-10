@@ -11,19 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Description:
- *
+ * logout是shiro自带的，不用开发
  * @author zhangr
  * 2020/1/9 14:10
  */
 @Api("logout")
 @RestController
 public class LogOutController {
-//    @ApiOperation(value = "/logout")
-//    @GetMapping("/logout")
-//    public JsonData<Object> needLogin() {
-//        Subject subject = SecurityUtils.getSubject();
-//        subject.logout();
-//        return new JsonData<>(0, null, "logout");
-//    }
-
 }
