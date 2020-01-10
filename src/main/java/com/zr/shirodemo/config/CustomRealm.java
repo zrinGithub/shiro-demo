@@ -57,7 +57,7 @@ public class CustomRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addRoles(roleList);
         info.addStringPermissions(permissionList);
-        return null;
+        return info;
     }
 
     /**

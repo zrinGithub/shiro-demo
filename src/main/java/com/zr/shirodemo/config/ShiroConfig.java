@@ -1,10 +1,10 @@
 package com.zr.shirodemo.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -44,12 +44,13 @@ public class ShiroConfig {
 
         //保持拦截的顺序，配置参考 DefaultFilter
         Map<String, String> filterDefinitionMap = new LinkedHashMap<>();
+        filterDefinitionMap.put("/swagger-ui.html", "anon");
         //退出过滤器
         filterDefinitionMap.put("/logout", "logout");
         //匿名可以访问
         filterDefinitionMap.put("/pub/**", "anon");
         //登录用户才可以访问
-        filterDefinitionMap.put("/authc/**", "auth");
+        filterDefinitionMap.put("/authc/**", "authc");
         //需要管理员角色才能访问
         filterDefinitionMap.put("/admin/**", "roles[admin]");
         //有编辑权限才能访问
@@ -66,7 +67,7 @@ public class ShiroConfig {
 
     @Bean
     public SecurityManager securityManager() {
-        DefaultSecurityManager securityManager = new DefaultSecurityManager();
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         //如果不是前后端分离，不用设置 sessionManager
         securityManager.setSessionManager(sessionManager());
@@ -79,7 +80,7 @@ public class ShiroConfig {
     @Bean
     public CustomRealm customRealm() {
         CustomRealm customRealm = new CustomRealm();
-        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+//        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return customRealm;
     }
 
@@ -91,7 +92,7 @@ public class ShiroConfig {
         credentialsMatcher.setHashAlgorithmName("md5");
         //散列次数，好比散列2次->  md5(md5(pwd))
         credentialsMatcher.setHashIterations(2);
-        return hashedCredentialsMatcher();
+        return credentialsMatcher;
     }
 
     @Bean
@@ -99,7 +100,7 @@ public class ShiroConfig {
         CustomSessionManager customSessionManager = new CustomSessionManager();
 
         //超时时间，默认 30分钟，会话超时；方法里面的单位是毫秒
-        customSessionManager.setGlobalSessionTimeout(20000);
+//        customSessionManager.setGlobalSessionTimeout(20000);
 
         return customSessionManager;
     }
