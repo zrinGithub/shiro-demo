@@ -53,7 +53,8 @@ public class ShiroConfig {
         //登录用户才可以访问
         filterDefinitionMap.put("/authc/**", "authc");
         //需要管理员角色才能访问
-        filterDefinitionMap.put("/admin/**", "roles[admin]");
+        //查看RolesAuthorizationFilter，必须要同时有这两个角色才行
+        filterDefinitionMap.put("/admin/**", "roles[admin,root]");
         //有编辑权限才能访问
         filterDefinitionMap.put("/video/update", "perms[video_update]");
 
