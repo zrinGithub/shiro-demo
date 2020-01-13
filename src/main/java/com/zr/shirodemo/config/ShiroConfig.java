@@ -154,6 +154,10 @@ public class ShiroConfig {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         //导入配置
         redisSessionDAO.setRedisManager(redisManager());
+
+        //配置自定义的sessionIdGenerator
+        redisSessionDAO.setSessionIdGenerator(new CustomSessionIdGenerator());
+
         return redisSessionDAO;
     }
 
