@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Description:
  * 权限信息
@@ -13,7 +15,9 @@ import lombok.Data;
  */
 @Data
 @ApiModel("权限信息")
-public class PermissionDto {
+public class PermissionDto implements Serializable {
+    private static final long serialVersionUID = -8273423345267377273L;
+
     @ApiModelProperty("ID")
     private Integer id;
 

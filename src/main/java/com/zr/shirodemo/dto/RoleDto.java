@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,9 @@ import java.util.List;
  */
 @Data
 @ApiModel("角色信息")
-public class RoleDto {
+public class RoleDto implements Serializable {
+    private static final long serialVersionUID = 5165900195989846796L;
+
     @ApiModelProperty("ID")
     private Integer id;
 

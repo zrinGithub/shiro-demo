@@ -8,6 +8,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -93,7 +94,7 @@ public class ShiroConfig {
         securityManager.setRealm(customRealm());
 
         //使用自定义的redisCacheManager
-        securityManager.setCacheManager(redisCacheManager() );
+        securityManager.setCacheManager(redisCacheManager());
 
         return securityManager;
     }
@@ -142,7 +143,18 @@ public class ShiroConfig {
         //超时时间，默认 30分钟，会话超时；方法里面的单位是毫秒
 //        customSessionManager.setGlobalSessionTimeout(20000);
 
+        //配置session持久化
+        customSessionManager.setSessionDAO(redisSessionDAO());
+
         return customSessionManager;
+    }
+
+    @Bean
+    public RedisSessionDAO redisSessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        //导入配置
+        redisSessionDAO.setRedisManager(redisManager());
+        return redisSessionDAO;
     }
 
 
