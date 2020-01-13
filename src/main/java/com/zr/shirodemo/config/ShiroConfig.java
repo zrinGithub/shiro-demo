@@ -6,6 +6,8 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -67,9 +69,9 @@ public class ShiroConfig {
 
         //自定义filter
         Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("roleOrFilter",new CustomRolesOrAuthorizationFilter());
+        filterMap.put("roleOrFilter", new CustomRolesOrAuthorizationFilter());
         factoryBean.setFilters(filterMap);
-        filterDefinitionMap.put("/adminOr","roleOrFilter[admin,root]");
+        filterDefinitionMap.put("/adminOr", "roleOrFilter[admin,root]");
 
         //authc: 通过认证才能访问
         //anon: 匿名访问
@@ -89,7 +91,30 @@ public class ShiroConfig {
 
         //设置realm推荐放在后面，不然可能因为版本文体不生效
         securityManager.setRealm(customRealm());
+
+        //使用自定义的redisCacheManager
+        securityManager.setCacheManager(redisCacheManager() );
+
         return securityManager;
+    }
+
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost("localhost");
+        redisManager.setPort(6379);
+        return redisManager;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager cacheManager = new RedisCacheManager();
+        //redis配置导入
+        cacheManager.setRedisManager(redisManager());
+        //设置过期时间，单位为秒
+        cacheManager.setExpire(20);
+
+        return cacheManager;
     }
 
     @Bean
@@ -100,7 +125,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
 
         //设置散列算法：这里使用md5

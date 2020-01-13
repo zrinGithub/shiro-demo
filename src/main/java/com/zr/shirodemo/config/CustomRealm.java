@@ -1,5 +1,6 @@
 package com.zr.shirodemo.config;
 
+import com.zr.shirodemo.domain.User;
 import com.zr.shirodemo.dto.PermissionDto;
 import com.zr.shirodemo.dto.RoleDto;
 import com.zr.shirodemo.dto.UserDto;
@@ -43,14 +44,18 @@ public class CustomRealm extends AuthorizingRealm {
         LOGGER.info("----进行权限校验----");
 
         //用户名称
-        String userName =(String) principals.getPrimaryPrincipal();
+//        String userName =(String) principals.getPrimaryPrincipal();
+//
+//        UserDto user = userService.findAllUserInfoByUsername(userName);
 
-        UserDto user = userService.findAllUserInfoByUsername(userName);
+        //增加redis作为缓存后，doGetAuthenticationInfo返回的是整个user对象
+        UserDto userDto = (UserDto) principals.getPrimaryPrincipal();
+        UserDto user = userService.findAllUserInfoByUsername(userDto.getUsername());
 
         List<String> roleList = user.getRoleList().stream().map(RoleDto::getName).collect(toList());
         List<String> permissionList = new ArrayList<>();
 
-        for(RoleDto roleDto:user.getRoleList()){
+        for (RoleDto roleDto : user.getRoleList()) {
             //取这里面的name作为权限
             permissionList.addAll(roleDto.getPermissionList().stream().map(PermissionDto::getName).collect(toList()));
         }
@@ -75,10 +80,12 @@ public class CustomRealm extends AuthorizingRealm {
         //取密码
         String password = user.getPassword();
 
-        if(StringUtils.isBlank(password))
+        if (StringUtils.isBlank(password))
             return null;
 
         //这里把真实的用户名和密码放到 info 中取，后面再 AuthenticatingRealm 中会进行比对
-        return new SimpleAuthenticationInfo(userName,password,this.getName());
+//        return new SimpleAuthenticationInfo(userName,password,this.getName());
+        //这里配合redis缓存做的修改，因为需要有redis key，that means your principal object has a method called "getAuthCacheKey()" or "getId()"
+        return new SimpleAuthenticationInfo(user, password, this.getName());
     }
 }
